@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>.</DockerfileContext>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Activator">
+      <HintPath>.Dependencies\Activator.dll</HintPath>
+    </Reference>
+    <Reference Include="AssmLoader">
+      <HintPath>.Dependencies\AssmLoader.dll</HintPath>
+    </Reference>
+    <Reference Include="IOBindings">
+      <HintPath>.Dependencies\IOBindings.dll</HintPath>
+    </Reference>
+    <Reference Include="IOGlobe">
+      <HintPath>.Dependencies\IOGlobe.dll</HintPath>
+    </Reference>
+    <Reference Include="IOMonitor">
+      <HintPath>.Dependencies\IOMonitor.dll</HintPath>
+    </Reference>
+    <Reference Include="IOObjects">
+      <HintPath>.Dependencies\IOObjects.dll</HintPath>
+    </Reference>
+    <Reference Include="IOService">
+      <HintPath>.Dependencies\IOService.dll</HintPath>
+    </Reference>
+    <Reference Include="IOTools">
+      <HintPath>.Dependencies\IOTools.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

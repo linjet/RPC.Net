@@ -1,0 +1,12 @@
+{
+    "encoding": "utf-8",
+    "default": [ "start.html", "index.html", "default.html" ],
+    "content": "..\\default\\configuration",
+    "pages": "..\\default\\configuration\\pages",
+    "bin":
+    [
+        "..\\default\\bin\\iocontent.dll",
+        "\\content\\serverconfig\\bin\\rpc.config.dll"
+    ],
+    "cors": false
+}
