@@ -1,4 +1,4 @@
-# Load-Balanced Remote Call Procedure Service
+# Load-Balanced Remote Procedure Call (RPC) Service
 ## .Net сервис вызова удаленных процедур (REST-call) c балансировкой нагрузки
 
 На текущем этапе разработки сервис выполняет свой функционал частично.
