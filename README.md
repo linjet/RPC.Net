@@ -1,4 +1,4 @@
-# Load-Balanced Remote Procedure Call (RPC) Service
+# .Net Load-Balanced Remote Procedure Call Service
 ## .Net сервис вызова удаленных процедур c балансировкой нагрузки
 - поумолчанию работает как многопоточный Web/REST-сервер
 - библиотека HTTP-Get (IOContent.dll) поддерживает все популярные алгоритмы сжатия контента: gzip, deflate, br, zstd
