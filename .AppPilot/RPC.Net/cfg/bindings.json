@@ -1,0 +1,29 @@
+{
+    "default":
+    {
+        "schemes": { "/": "/iocontent/iocontent/httpget/get" },
+        "bindconfig": "\\content\\default\\cfg.json"
+    },
+    "configuration":
+    {
+        "schemes":
+        {
+            "/config": "/iocontent/iocontent/httpget/get",
+            "/config/server": "/rpc.config/service/config",
+            "/config/router": "/rpc.config/service/config",
+            "/config/monitor": "/rpc.config/service/config",
+            "/config/bindings": "/rpc.config/service/config"
+        },
+        "bindconfig": "\\content\\config\\cfg.json"
+    },
+    "monitoring":
+    {
+        "schemes":
+        {
+            "/monitor": "/iocontent/iocontent/httpget/get",
+            "/monitor/server": "/rpc.monitor/server/monitor",
+            "/monitor/router": "/rpc.monitor/router/monitor"
+        },
+        "bindconfig": "\\content\\monitor\\cfg.json"
+    }
+}

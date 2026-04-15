@@ -1,0 +1,13 @@
+{
+    "encoding": "utf-8",
+    "default": [ "start.html", "index.html", "default.html" ],
+    "content": "..\\default\\configuration",
+    "pages": "..\\default\\configuration\\pages",
+    "bin":
+    [
+        "..\\default\\lib\\iocontent.dll",
+        "\\content\\config\\lib\\rpc.config.dll",
+        "\\content\\config\\lib\\rpc.monitor.config.dll"
+    ],
+    "cors": false
+}

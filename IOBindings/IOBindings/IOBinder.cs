@@ -74,8 +74,11 @@ namespace IOBinding
                             string Key = Scheme.Key.ToLower();
                             if (Key.StartsWith(value))
                             {
-                                Key = alias + Key.Substring(value.Length);
+                                Key = Key.Substring(value.Length);
+                                if (!alias.EndsWith(schemeSeparator)) { alias += schemeSeparator; }
+                                Key = alias + Key;
                             }
+                            if (Key.EndsWith(schemeSeparator) && Key != schemeSeparator) { Key = Key.Substring(0, Key.Length - 1); }
                             if (ContainsKey(Key)) { continue; }
                             Add(Key, Scheme.Value.Exec);
                             Map.Add(Key, Scheme.Key);

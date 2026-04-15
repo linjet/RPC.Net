@@ -1,0 +1,46 @@
+{
+    "service": "Load-Balanced Remote Call Procedure Service",
+    "shortname": "LB RPC Service",
+    "runame": ".Net сервис вызова удаленных процедур c балансировкой нагрузки",
+    "version": "10.0.0.1",
+    "address": "any",
+    "port": 8080,
+    "timeout": 60000,
+    "buffer": 4096,
+    "encoding": "utf-8",
+    "tls": null,
+    "maxconnections": 0,
+    "observation": 1000,
+    "authorization": "/authentication/authorization/authentication/check",
+    "dataparser": "/parser/iostream/dataparser/parsing",
+    "plugins":
+    [
+        "\\plugins\\authentication.dll",
+        "\\plugins\\parser.dll"
+    ],
+    "log":
+    {
+        "address": "any",
+        "port": 6801,
+        "db":
+        {
+            "host": "localhost:5432",
+            "database": "iolog",
+            "username": "linjet",
+            "pass": "jD5LnZOD"
+        }
+    },
+    "monitor":
+    {
+        "address": "any",
+        "port": 6802,
+        "db":
+        {
+            "host": "localhost:5432",
+            "port": 5432,
+            "database": "iomonitor",
+            "username": "linjet",
+            "pass": "jD5LnZOD"
+        }
+    } 
+}
