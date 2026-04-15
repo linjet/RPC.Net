@@ -1,8 +1,0 @@
-{
-    "encoding": "utf-8",
-    "default": [ "start.html", "index.html", "default.html" ],
-    "content": "\\content\\default",
-    "pages": "\\content\\default\\pages",
-    "bin": [ "\\content\\default\\bin\\iocontent.dll" ],
-    "cors": true
-}
