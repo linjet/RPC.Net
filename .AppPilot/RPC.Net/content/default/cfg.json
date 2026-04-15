@@ -4,6 +4,7 @@
     "content": "\\content\\default",
     "pages": "\\content\\default\\pages",
     "bin": [ "\\content\\default\\lib\\iocontent.dll" ],
-    "pca": "preferred compression algorithm (gzip, zstd, Brotli aka br, deflate)",
+    "pcatext": ["br", "zstd", "gzip", "deflate"],
+    "pcabinary": ["zstd", "gzip", "deflate"],
     "cors": true
 }

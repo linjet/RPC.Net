@@ -15,12 +15,15 @@ namespace IOContent
     }
     public class HConfig : IOHostConfig
     {
-        public string pca { get; set; } = "gzip";
+        public List<string>? PcaText { get; set; }
+        public List<string>? PcaBinary { get; set; }
         public HConfig() { }
     }
     public class HttpGet
     {
         public static Dictionary<string, MediaItem>? Media = null;
+        private List<string> PreferredText = new List<string> { "br", "zstd", "gzip", "deflate" };
+        private List<string> PreferredBinary = new List<string> { "zstd", "gzip", "deflate" };
         public static HConfig? Config { get; set; }
         public HttpGet() { }
         public HttpGet(ExecProxy Proxy)
@@ -56,6 +59,8 @@ namespace IOContent
                 }
                 catch { Config = new HConfig(); }
             }
+            if (Config!.PcaText != null) { PreferredText = Config.PcaText; }
+            if (Config!.PcaBinary != null) { PreferredBinary = Config.PcaBinary; }
 
             if (Media == null)
             {
@@ -139,7 +144,7 @@ namespace IOContent
                 return;
             }
             byte[] data = File.ReadAllBytes(path);
-            data = CompressData(Request, Response, data);
+            data = CompressData(Request, Response, data, _Media[ext]);
             Response.HttpHeaders!.Add("Content-Length", data.Length.ToString(), false);
             if (Request.HttpMethod == "head")
             {
@@ -149,32 +154,53 @@ namespace IOContent
             Response.Data.AddRange(data);
             data = Array.Empty<byte>();
         }
-        public byte[] CompressData(IOSRequest Request, IOSResponse Response, byte[] data)
+        public byte[] CompressData(IOSRequest Request, IOSResponse Response, byte[] data, MediaItem media)
         {
             string? compressMethods = Request.HttpHeaders!.Find("accept-encoding");
             if (string.IsNullOrEmpty(compressMethods)) { return data; }
             List<string> Methods = compressMethods.Split(',').ToList();
-            if (Methods.Exists(x => x.Trim().ToLower() == "gzip"))
+            List<string> Preferred = PreferredText;
+            if (media.Binary)
+            {
+                Preferred = PreferredBinary;
+            }
+            if (!Methods.Exists(x => x.Trim().ToLower() == "gzip"))
+            {
+                Preferred.Remove("gzip");
+            }
+            if (!Methods.Exists(x => x.Trim().ToLower() == "zstd"))
+            {
+                Preferred.Remove("zstd");
+            }
+            if (!Methods.Exists(x => x.Trim().ToLower() == "deflate"))
+            {
+                Preferred.Remove("deflate");
+            }
+            if (!Methods.Exists(x => x.Trim().ToLower() == "br"))
+            {
+                Preferred.Remove("br");
+            }
+            if (Preferred.Count == 0) { return data; }
+            if (Preferred[0] == "gzip")
             {
                 data = GzipCompress(data);
                 Response.HttpHeaders!.Add("Content-Encoding", "gzip", false);
             }
-            else if (Methods.Exists(x => x.Trim().ToLower() == "zstd"))
+            else if (Preferred[0] == "zstd")
             {
                 data = ZstdCompress(data);
                 Response.HttpHeaders!.Add("Content-Encoding", "zstd", false);
             }
-            else if (Methods.Exists(x => x.Trim().ToLower() == "deflate"))
+            else if (Preferred[0] == "deflate")
             {
                 data = DeflateCompress(data);
                 Response.HttpHeaders!.Add("Content-Encoding", "deflate", false);
             }
-            else if (Methods.Exists(x => x.Trim().ToLower() == "br"))
+            else if (Preferred[0] == "br")
             {
                 data = BrotliCompress(data);
                 Response.HttpHeaders!.Add("Content-Encoding", "br", false);
             }
-            else { return data; }
             return data;
         }
         private byte[] GzipCompress(byte[] data)
@@ -185,22 +211,26 @@ namespace IOContent
                 {
                     gzipStream.Write(data, 0, data.Length);
                 }
-                data = compressedStream.ToArray();
+                return compressedStream.ToArray();
             }
-            return data;
         }
         private byte[] ZstdCompress(byte[] data)
         {
             using (var compressor = new Compressor())
             {
-                data = compressor.Wrap(data);
+                return compressor.Wrap(data);
             }
-            return data;
         }
         private byte[] BrotliCompress(byte[] data)
         {
-            data = Brotli.CompressBytes(data);
-            return data;
+            using (var memoryStream = new MemoryStream())
+            {
+                using (var brotliStream = new BrotliStream(memoryStream, CompressionLevel.Optimal))
+                {
+                    brotliStream.Write(data, 0, data.Length);
+                }
+                return memoryStream.ToArray();
+            }
         }
         private byte[] DeflateCompress(byte[] data)
         {
@@ -210,9 +240,8 @@ namespace IOContent
                 {
                     gzipStream.Write(data, 0, data.Length);
                 }
-                data = compressedStream.ToArray();
+                return compressedStream.ToArray();
             }
-            return data;
         }
     }
 }
