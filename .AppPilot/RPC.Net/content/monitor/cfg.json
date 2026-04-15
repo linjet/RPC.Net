@@ -1,11 +1,10 @@
 {
     "encoding": "utf-8",
     "default": [ "start.html", "index.html", "default.html" ],
-    "content": "..\\default\\monitoring",
-    "pages": "..\\default\\monitoring\\pages",
+    "content": "\\content\\default\\monitoring",
     "bin":
     [
-        "..\\default\\lib\\iocontent.dll",
+        "\\content\\default\\lib\\iocontent.dll",
         "\\content\\monitor\\lib\\rpc.monitor.dll"
     ],
     "cors": false

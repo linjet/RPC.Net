@@ -1,11 +1,10 @@
 {
     "encoding": "utf-8",
     "default": [ "start.html", "index.html", "default.html" ],
-    "content": "..\\default\\configuration",
-    "pages": "..\\default\\configuration\\pages",
+    "content": "\\content\\default\\configuration",
     "bin":
     [
-        "..\\default\\lib\\iocontent.dll",
+        "\\content\\default\\lib\\iocontent.dll",
         "\\content\\config\\lib\\rpc.config.dll",
         "\\content\\config\\lib\\rpc.monitor.config.dll"
     ],

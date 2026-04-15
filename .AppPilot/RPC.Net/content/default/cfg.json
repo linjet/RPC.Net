@@ -2,7 +2,6 @@
     "encoding": "utf-8",
     "default": [ "start.html", "index.html", "default.html" ],
     "content": "\\content\\default",
-    "pages": "\\content\\default\\pages",
     "bin": [ "\\content\\default\\lib\\iocontent.dll" ],
     "pcatext": ["br", "zstd", "gzip", "deflate"],
     "pcabinary": ["zstd", "gzip", "deflate"],

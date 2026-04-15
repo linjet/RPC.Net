@@ -54,7 +54,6 @@ namespace Tools
         public Encoding Encoding { get; set; }
         public List<string> Default { get; set; }
         public string Content { get; set; }
-        public string Pages { get; set; }
         public IPlugIns Bin { get; set; }
         public bool Cors { get; set; }
         public IOHostConfig()
@@ -63,7 +62,6 @@ namespace Tools
             Default = new List<string>();
             Bin = new IPlugIns();
             Content = Environment.CurrentDirectory;
-            Pages = Environment.CurrentDirectory;
             Cors = false;
         }
         public static IOHostConfig? Load(string path)
@@ -84,18 +82,6 @@ namespace Tools
             }
             if (!Directory.Exists(Host.Content)) { Host.Content = string.Empty; }
             Host.Content = Host.Content.ToLower();
-
-            if (string.IsNullOrEmpty(Host.Pages))
-            {
-                Host.Pages = Environment.CurrentDirectory;
-            }
-            else if (Host.Pages.StartsWith(separator) && !Host.Pages.StartsWith(absolutepathDef))
-            {
-                Host.Pages = Path.Combine(Environment.CurrentDirectory, Host.Pages.Substring(1));
-            }
-            if (!Directory.Exists(Host.Pages)) { Host.Pages = string.Empty; }
-            Host.Pages = Host.Pages.ToLower();
-
             IPlugIns Bin = new IPlugIns();
             for (int i = 0; i < Host.Bin.Count; i++)
             {
@@ -144,9 +130,6 @@ namespace Tools
             string value = Content;
             if (string.IsNullOrEmpty(value)) { value = "null"; }
             Nfo.Add($"{space}Content: {value}");
-            value = Pages;
-            if (string.IsNullOrEmpty(value)) { value = "null"; }
-            Nfo.Add($"{space}Pages: {value}");
             if (Bin.Count == 0)
             {
                 Nfo.Add($"{space}Bins: null");
