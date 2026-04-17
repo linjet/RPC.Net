@@ -1,4 +1,4 @@
-# .Net Remote Procedure Call Service
+# .Net Remote Procedure Call Server
 ## .Net сервис вызова удаленных процедур
 - поумолчанию работает как многопоточный HTTP/REST-сервер
 - библиотека HTTP-Get (IOContent.dll) поддерживает все популярные алгоритмы сжатия: gzip, deflate, br, zstd, поддерживает динамический выбор алгоритма в зависимости от типа контента.
