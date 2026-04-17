@@ -5,7 +5,9 @@ using IOBinding;
 using IOMonitor;
 using IOObjects;
 using IOService;
+using System;
 using System.Reflection;
+using System.Runtime.Loader;
 using Tools;
 
 namespace IOServer
@@ -17,14 +19,36 @@ namespace IOServer
     {
         static bool quit = false;
         static string serverconfig = @"./cfg/config.json";
-        static string routerconfig = @"./cfg/router.json";
         static string bindingsconfig = @"./cfg/bindings.json";
         static TCP? Server = null;
-        static TCP? Router = null;
         static IOBindings? cfgBindings = null;
 
         static ConsoleColor ServerInfoColor = ConsoleColor.Yellow;
         static ConsoleColor RouterInfoColor = ConsoleColor.Green;
+
+        static mInterface()
+        {
+        }
+        private static Assembly MyResolveEventHandler(object sender, ResolveEventArgs args)
+        {
+            Assembly MyAssembly, objExecutingAssemblies;
+            string env = Environment.CurrentDirectory;
+            string depPath = Path.Combine(env, "lib");
+            string strTempAssmbPath = "";
+            objExecutingAssemblies = Assembly.GetExecutingAssembly();
+            AssemblyName[] arrReferencedAssmbNames = objExecutingAssemblies.GetReferencedAssemblies();
+            foreach (AssemblyName strAssmbName in arrReferencedAssmbNames)
+            {
+                if (strAssmbName.FullName.Substring(0, strAssmbName.FullName.IndexOf(",")) == args.Name.Substring(0, args.Name.IndexOf(",")))
+                {
+                    strTempAssmbPath = depPath +
+                        args.Name.Substring(0, args.Name.IndexOf(",")) + ".dll";
+                }
+            }
+            MyAssembly = Assembly.LoadFrom(strTempAssmbPath);
+            return MyAssembly;
+        }
+
         static void CommandProcessing(string input)
         {
             string command = input.Trim().ToLower();
@@ -64,18 +88,6 @@ namespace IOServer
                 Console.Clear();
                 Server.Info(true, ServerInfoColor);
             }
-            if (instance == "r" && command == "i" && Router != null)
-            {
-                Console.Clear();
-                Router.Info(true, RouterInfoColor);
-            }
-            if (instance == "sr" && command == "i" && Server != null && Router != null)
-            {
-                Console.Clear();
-                Router.Info(true, RouterInfoColor);
-                Console.WriteLine($"");
-                Server.Info(true, ServerInfoColor);
-            }
         }
         static void Main(string[] args)
         {
@@ -85,19 +97,10 @@ namespace IOServer
                 cfgBindings = IOBindings.Load(bindingsconfig);
                 IConfigs.Bindings = cfgBindings;
 
-                IOConfig? RouterConfig = JsonReader.Load<IOConfig>(routerconfig);
                 IOConfig? ServerConfig = JsonReader.Load<IOConfig>(serverconfig);
 
                 IOMonitor.IOServer? Logger = null;
                 IOMonitor.IOServer? Monitor = null;
-
-                if (RouterConfig != null)
-                {
-                    Router = new TCP(RouterConfig, false);
-                    Router.Simple = true;
-                    Router.Start();
-                    IOGlobe.BackListener = Router;
-                }
 
                 if (ServerConfig != null)
                 {
@@ -149,26 +152,8 @@ namespace IOServer
                 Binder.Bind(cfgBindings!, IOGlobe.Proxy!);
                 IOGlobe.Bindings = Binder;
 
+                Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Green;
-                if (Router != null)
-                {
-                    Console.WriteLine($"\nTCP Router   {Router.Address}:{Router.Port}, listen: {Router.listen.ToString().ToLower()}");
-                    if (Router.LogSender != null)
-                    {
-                        Console.WriteLine($"Router Log Interface {Router.LogSender.EndPoint}");
-                    }
-                    if (Router.MonSender != null)
-                    {
-                        if (Router.LogSender != null && Router.MonSender.EndPoint.Address.Equals(Router.LogSender.EndPoint.Address) && Router.MonSender.EndPoint.Port == Router.LogSender.EndPoint.Port)
-                        {
-                            Console.WriteLine($"Router Log and Monitor Interface {Router.MonSender.EndPoint}");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Router Monitor Interface {Router.MonSender.EndPoint}");
-                        }
-                    }
-                }
                 if (Server != null)
                 {
                     Console.WriteLine($"TCP Frontend {Server.Address}:{Server.Port}, listen: {Server.listen.ToString().ToLower()}");
