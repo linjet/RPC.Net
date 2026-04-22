@@ -1,4 +1,4 @@
-<h1>.Net Remote Procedure Call Server</h1>
+<h1><img src="https://github.com/linjet/RPC.Net/blob/main/230978100.ico" height="32"/>&nbsp;.Net Remote Procedure Call Server</h1>
 <h2>.Net сервер вызова удаленных процедур</h2>
 - поумолчанию работает как многопоточный HTTP/REST-сервер<br>
 - библиотека HTTP-Get (IOContent.dll) поддерживает все популярные алгоритмы сжатия: gzip, deflate, br, zstd, поддерживает динамический выбор алгоритма в зависимости от типа контента.
